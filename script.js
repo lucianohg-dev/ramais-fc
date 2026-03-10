@@ -11,11 +11,18 @@ let dadosRamais = [];
 let timeoutBusca = null;
 
 const playlistData = [
-    { nome: "Som de Chuva", estilo: "relax", url: "URL_DO_SUPABASE_1" },
-    { nome: "Ambiente Loja", estilo: "foco", url: "URL_DO_SUPABASE_2" },
-    { nome: "Alerta Geral", estilo: "todos", url: "URL_DO_SUPABASE_3" }
+{ nome: "Louis armstrong", musica: "What a Wonderful World", estilo: "relax", url: "https://archive.org/download/louis-armstrong-what-a-wonderful-world-vinyl-single-1967/A-What%20A%20Wonderful%20World.mp3" },
+    { nome: "The Cranberries", musica: "Linger", estilo: "balada pop", url: "https://ia800900.us.archive.org/32/items/the-cranberries-linger/The%20Cranberries%20-%20Linger.mp4" },
+    { nome: "Tears For Fears", musica: "Woman In Chains", estilo: "balada pop", url: "https://dn711302.ca.archive.org/0/items/Tears_For_Fears_And_Oleta_Adams_Woman_In_Chains/Tears_For_Fears_And_Oleta_Adams_Woman_In_Chains.mp4" }, 
+    { nome: "Legião Urbana", musica: "Quase sem querer", estilo: "rock nacional", url: "https://archive.org/download/1986-legiao-urbana-dois/02%20-%20Quase%20sem%20querer.mp3" }, 
+    { nome: "Christopher Cross", musica: "Sailing", estilo: "relax", url: "https://archive.org/download/youtube-JNAgBRB7ouY/Christopher_Cross_-_Sailing_NAVEGANDO_SIN_RUMBO_.-JNAgBRB7ouY.mp4" },
+    { nome: "Djavan", musica: "Oceano", estilo: "MPB", url: "https://archive.org/download/05.-oceano/05.%20Oceano.mp3" },
+    { nome: "Djavan", musica: "Outono", estilo: "MPB", url: "https://archive.org/download/05.-oceano/06.%20Outono.mp3" },
+    { nome: "Djavan", musica: "Meu Bem Querer", estilo: "MPB", url: "https://archive.org/download/14.-milagreiro-feat.-cassia-eller/08.%20Meu%20Bem%20Querer.mp3" },
+    { nome: "Os Paralamas do Sucesso", musica: "Romance Ideal", estilo: "rock nacional", url: "https://archive.org/download/6-mensagem-de-amor/4%20-%20Romance%20Ideal.mp3" },
+    { nome: "Marina Lima", musica: "Virgem", estilo: "MPB", url: "https://archive.org/download/04.-hearts_202504/06.%20Virgem.mp3" },
+    { nome: "Marina Lima", musica: "Fullgás", estilo: "MPB", url: "https://archive.org/download/09.-veneno-veleno_202404/01.%20Fullg%C3%A1s.mp3" }
 ];
-
 const gradeHorariosOnibus = [
     { h: "07:20", orig: "ESTAC." }, { h: "07:35", orig: "ESTAC." }, { h: "07:50", orig: "ESTAC." },
     { h: "08:05", orig: "ESTAC." }, { h: "08:20", orig: "ESTAC." }, { h: "08:35", orig: "ESTAC." },
@@ -74,7 +81,26 @@ document.addEventListener('DOMContentLoaded', () => {
    ========================================================================== */
 function verificarProximoOnibus() {
     const agora = new Date();
-    const tempoAtualEmMinutos = (agora.getHours() * 60) + agora.getMinutes();
+    const hora = agora.getHours();
+    const tempoAtualEmMinutos = (hora * 60) + agora.getMinutes();
+    
+    const divAlerta = document.getElementById('alerta-onibus');
+    const textoAlerta = document.getElementById('texto-alerta');
+    
+    if (!divAlerta || !textoAlerta) return;
+
+    // Implementação do Intervalo na Marquee
+    const noIntervalo1 = (hora === 13); // 13:00 às 13:59
+    const noIntervalo2 = (hora === 20); // 20:00 às 20:59
+
+    if (noIntervalo1 || noIntervalo2) {
+        const periodo = noIntervalo1 ? "13:00 às 14:00" : "20:00 às 21:00";
+        textoAlerta.innerText = `⚠️ INTERVALO DOS MOTORISTAS: RETORNO DAS ATIVIDADES APÓS ÀS ${periodo.split(' às ')[1]} ⚠️`;
+        divAlerta.style.display = 'flex';
+        return; // Interrompe para não mostrar alerta de ônibus saindo
+    }
+
+    // Lógica Original de Próximo Ônibus
     let mostrarAlerta = false;
     let infoImediato = null;
     let infoFuturo = null;
@@ -92,21 +118,16 @@ function verificarProximoOnibus() {
         }
     }
 
-    const divAlerta = document.getElementById('alerta-onibus');
-    const textoAlerta = document.getElementById('texto-alerta');
-
-    if (divAlerta && textoAlerta) {
-        if (mostrarAlerta) {
-            const destino = infoImediato.orig === "ESTAC." ? "LOJA" : "ESTAC.";
-            const novaMsg = `🚨 AGORA: ÔNIBUS SAINDO ÀS ${infoImediato.h} (SAÍDA ${infoImediato.orig} ➔ ${destino}) 🚨 FAVOR SE DIRIGIR AO PONTO DE EMBARQUE 🚨 PRÓXIMA SAÍDA ÀS ${infoFuturo.h} (${infoFuturo.orig}) 🚨`;
-            
-            if (textoAlerta.innerText !== novaMsg) {
-                textoAlerta.innerText = novaMsg;
-                divAlerta.style.display = 'flex';
-            }
-        } else {
-            divAlerta.style.display = 'none';
+    if (mostrarAlerta) {
+        const destino = infoImediato.orig === "ESTAC." ? "LOJA" : "ESTAC.";
+        const novaMsg = `🚨 AGORA: ÔNIBUS SAINDO ÀS ${infoImediato.h} (SAÍDA ${infoImediato.orig} ➔ ${destino}) 🚨 FAVOR SE DIRIGIR AO PONTO DE EMBARQUE 🚨 PRÓXIMA SAÍDA ÀS ${infoFuturo.h} (${infoFuturo.orig}) 🚨`;
+        
+        if (textoAlerta.innerText !== novaMsg) {
+            textoAlerta.innerText = novaMsg;
+            divAlerta.style.display = 'flex';
         }
+    } else {
+        divAlerta.style.display = 'none';
     }
 }
 
@@ -130,49 +151,74 @@ async function fetchData() {
 function renderTable(filtro = "") {
     const corpo = document.getElementById('corpoTabela');
     if (!corpo) return;
+
     const termo = filtro.toLowerCase().trim();
-    const grupos = {};
-
-    const filtrados = dadosRamais.filter(i => 
-        (i.nome || "").toLowerCase().includes(termo) || 
-        (i.setor || "").toLowerCase().includes(termo) || 
-        (i.ramal || "").toString().includes(termo)
-    );
-
-    filtrados.forEach(item => {
-        const s = item.setor || "OUTROS";
-        if (!grupos[s]) grupos[s] = [];
-        grupos[s].push(item);
+    
+    // 1. Filtragem eficiente
+    const filtrados = dadosRamais.filter(i => {
+        const nome = (i.nome || "").toLowerCase();
+        const setor = (i.setor || "").toLowerCase();
+        const ramal = (i.ramal || "").toString();
+        return nome.includes(termo) || setor.includes(termo) || ramal.includes(termo);
     });
 
-    let htmlFinal = "";
-    for (let setor in grupos) {
-        htmlFinal += `<tr class="row-setor"><td colspan="2">${setor}</td></tr>`;
-        grupos[setor].forEach(p => {
-            htmlFinal += `
-            <tr class="item-row">
-                <td>
-                    <div style="font-weight:700; color:#1e293b;">${p.nome}</div>
-                    <div style="font-size:11px; color:#64748b;">📍 ${p.setor} ${p.contato ? '| 📱 '+p.contato : ''}</div>
-                    <div style="margin-top:8px">
-                        <span onclick="editItem('${p.id}')" style="color:var(--fc-primary); font-size:10px; cursor:pointer; font-weight:bold; text-decoration:underline;">EDITAR</span>
-                        <span onclick="deleteItem('${p.id}')" style="color:var(--fc-accent); font-size:10px; cursor:pointer; font-weight:bold; margin-left:15px; text-decoration:underline;">EXCLUIR</span>
+    // 2. Agrupamento por setor
+    const grupos = filtrados.reduce((acc, item) => {
+        const s = item.setor || "OUTROS";
+        if (!acc[s]) acc[s] = [];
+        acc[s].push(item);
+        return acc;
+    }, {});
+
+    const setoresOrdenados = Object.keys(grupos).sort();
+
+    // 3. Verificação de dados vazios
+    if (setoresOrdenados.length === 0) {
+        corpo.innerHTML = `<tr><td colspan="2" style="text-align:center; padding: 30px; color: #64748b;">Nenhum ramal encontrado.</td></tr>`;
+        return;
+    }
+
+    // 4. Construção do HTML com o Badge Amarelo
+    const htmlFinal = setoresOrdenados.map(setor => {
+        const headerSetor = `
+            <tr class="row-setor" style="background-color: #f8fafc;">
+                <td colspan="2" style="color: #334155; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; padding: 12px 15px;">
+                    📂 ${setor}
+                </td>
+            </tr>`;
+
+        const itens = grupos[setor].map(p => `
+            <tr class="item-row" style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 12px 15px;">
+                    <div style="font-weight: 600; color: #1e293b; font-size: 14px;">${p.nome || 'Sem Nome'}</div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                        ${p.contato ? '📱 ' + p.contato : '📍 ' + (p.setor || 'Geral')}
+                    </div>
+                    <div style="margin-top: 8px; display: flex; gap: 15px;">
+                        <span onclick="editItem('${p.id}')" style="color: #2563eb; font-size: 11px; cursor: pointer; font-weight: 700; text-transform: uppercase;">Editar</span>
+                        <span onclick="deleteItem('${p.id}')" style="color: #dc2626; font-size: 11px; cursor: pointer; font-weight: 700; text-transform: uppercase;">Excluir</span>
                     </div>
                 </td>
-                <td style="text-align:right"><span class="ramal-badge">📞 ${p.ramal}</span></td>
-            </tr>`;
-        });
-    }
-    corpo.innerHTML = htmlFinal || "<tr><td colspan='2' style='text-align:center;'>Nenhum resultado.</td></tr>";
-}
+                <td style="text-align: right; padding: 12px 15px; vertical-align: middle;">
+                    <span style="background-color: #FFD400; color: #000; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; border: 1px solid #eab308; display: inline-block;">
+                        📞 ${p.ramal}
+                    </span>
+                </td>
+            </tr>
+        `).join('');
 
+        return headerSetor + itens;
+    }).join('');
+
+    corpo.innerHTML = htmlFinal;
+}
 async function saveData() {
     const id = document.getElementById('form-id').value;
     const payload = {
         nome: document.getElementById('form-nome').value,
         setor: document.getElementById('form-setor').value,
         ramal: document.getElementById('form-ramal').value,
-        contato: document.getElementById('form-contato').value
+       
     };
     if (!payload.nome || !payload.setor || !payload.ramal) return alert("Preencha os campos obrigatórios.");
     try {
@@ -194,7 +240,6 @@ function editItem(id) {
     document.getElementById('form-nome').value = item.nome;
     document.getElementById('form-setor').value = item.setor;
     document.getElementById('form-ramal').value = item.ramal;
-    document.getElementById('form-contato').value = item.contato || '';
     document.getElementById('titulo-form').innerText = "📝 Editar Ramal";
     switchView('form', true);
 }
@@ -231,17 +276,30 @@ function filtrar() {
 }
 
 /* ==========================================================================
+/* ========================================================================== 
    6. MÓDULO: MEDIA PLAYER
    ========================================================================== */
 const audio = document.getElementById('mainAudioPlayer');
 const btnPlay = document.getElementById('mp-play-pause');
 const displayNome = document.getElementById('mp-now-playing');
+const volSlider = document.getElementById('mp-volume'); // ID correto conforme seu CSS
+
+// AJUSTE INICIAL: Volume em 40% (0.4 para o áudio, 40 para o slider)
+if (audio) { 
+    audio.volume = 0.4; 
+}
+if (volSlider) { 
+    volSlider.value = 40; 
+}
 
 function mpRender(filtro = 'todos') {
     const lista = document.getElementById('mp-list');
     if(!lista) return;
     lista.innerHTML = "";
+    
+    // Filtro da Playlist
     const filtradas = filtro === 'todos' ? playlistData : playlistData.filter(m => m.estilo === filtro);
+    
     filtradas.forEach(musica => {
         const div = document.createElement('div');
         div.className = "mp-song-item";
@@ -259,21 +317,40 @@ function mpPlay(musica) {
 }
 
 function mpToggle() {
-    if (audio.paused) { audio.play(); btnPlay.innerText = "⏸️"; } 
-    else { audio.pause(); btnPlay.innerText = "▶️"; }
+    if (audio.paused) { 
+        audio.play(); 
+        btnPlay.innerText = "⏸️"; 
+    } else { 
+        audio.pause(); 
+        btnPlay.innerText = "▶️"; 
+    }
 }
 
 function mpStop() {
-    audio.pause(); audio.currentTime = 0;
+    audio.pause(); 
+    audio.currentTime = 0;
     btnPlay.innerText = "▶️";
     displayNome.innerText = "Parado";
 }
 
-function mpFilter(estilo) {
-    document.querySelectorAll('.mp-tab-btn').forEach(b => b.classList.remove('active'));
-    mpRender(estilo);
+// Função de Controle de volume (ligada ao evento oninput do seu HTML)
+function mpVolume(val) {
+    if (audio) {
+        audio.volume = val / 100;
+    }
 }
 
+function mpFilter(estilo) {
+    // Remove classe active de todos os botões de aba
+    document.querySelectorAll('.mp-tab-btn').forEach(b => b.classList.remove('active'));
+    
+    // Adiciona active ao botão clicado (quem chamou a função)
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    
+    mpRender(estilo);
+}
 /* ==========================================================================
    7. INTERFACE, CLIMA (OPEN-METEO) E NAVEGAÇÃO
    ========================================================================== */
@@ -282,7 +359,7 @@ function mpFilter(estilo) {
 async function buscarClimaAPI() {
     try {
         // Coordenadas de Recife: lat -8.05, lon -34.88
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=-8.05&longitude=-34.88&current=temperature_2m,relative_humidity_2m,is_day,precipitation,weather_code&timezone=America%2FRecife`;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=-8.05&longitude=-34.88&current=temperature_2m,weather_code&timezone=America%2FRecife`;
         
         const response = await fetch(url);
         const data = await response.json();
@@ -291,17 +368,33 @@ async function buscarClimaAPI() {
             const temp = Math.round(data.current.temperature_2m);
             const code = data.current.weather_code;
             
-            // Códigos Open-Meteo: 51, 53, 55, 61, 63, 65, 80, 81, 82 são chuva
-            const isChuva = [51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code);
+            // Definição das categorias baseada nos códigos WMO
+            const codigosChuva = [51, 53, 55, 61, 63, 65, 80, 81, 82, 95, 96, 99];
+            const codigosNublado = [1, 2, 3];
             
+            let statusTexto = "Céu Limpo";
+            let temChuva = false;
+
+            if (codigosChuva.includes(code)) {
+                statusTexto = "Alerta de Chuva";
+                temChuva = true;
+            } else if (codigosNublado.includes(code)) {
+                statusTexto = "Tempo Nublado";
+                temChuva = false;
+            }
+
             const climaInfo = {
                 temp: temp,
-                chuva: isChuva,
-                msg: isChuva ? "Alerta de Chuva" : "Céu Limpo"
+                chuva: temChuva,
+                msg: statusTexto,
+                lastUpdate: new Date().toLocaleTimeString() // Para você conferir se atualizou
             };
 
             localStorage.setItem('weather_data_v2', JSON.stringify(climaInfo));
-            atualizarRelogioTela(); // Atualiza a barra imediatamente
+            
+            if (typeof atualizarRelogioTela === 'function') {
+                atualizarRelogioTela();
+            }
         }
     } catch (e) {
         console.error("Erro ao buscar clima:", e);
@@ -353,3 +446,13 @@ document.getElementById('form-contato')?.addEventListener('input', (e) => {
     let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
     e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
 });
+
+/* ==========================================================================
+   8. MÓDULO: MODAL DE ACIDENTE
+   ========================================================================== */
+function toggleModal(show) {
+    const modal = document.getElementById('modalAcidente');
+    if (modal) {
+        modal.style.display = show ? 'flex' : 'none';
+    }
+}

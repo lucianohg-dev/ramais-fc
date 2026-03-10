@@ -1,11 +1,14 @@
+/* ==========================================================================
+   CONFIGURAÇÕES GLOBAIS E VARIÁVEIS
+   ========================================================================== */
 :root {
     /* CORES PRINCIPAIS */
-    --fc-primary: #003399;      /* Azul */
-    --fc-primary-dark: #002673; /* Azul Escuro */
-    --fc-yellow: #FFD400;       /* Amarelo (Ramais e Destaques) */
-    --fc-accent: #ED1C24;       /* Vermelho (Sair e Acidente) */
+    --fc-primary: #003399;       /* Azul */
+    --fc-primary-dark: #002673;  /* Azul Escuro */
+    --fc-yellow: #FFD400;        /* Amarelo (Ramais e Destaques) */
+    --fc-accent: #ED1C24;        /* Vermelho (Sair e Acidente) */
     --fc-white: #ffffff;
-    --fc-bg: #f1f5f9;
+    --fc-bg: #f1f9f1;
 }
 
 /* LAYOUT BASE */
@@ -16,36 +19,49 @@ html, body {
     display: flex; 
     flex-direction: column;
     font-family: 'Inter', sans-serif; 
-    
-    /* --- AJUSTE PARA O BACKGROUND DE PÁSCOA --- */
-    background-color: var( --fc-bg); ;
-    background-size: 100% 100%;        /* Faz a imagem preencher toda a tela */
-    background-position: center;   /* Centraliza a imagem */
-    background-repeat: no-repeat;  /* Impede que a imagem fique duplicada */
-    background-attachment: fixed;  /* Mantém o fundo fixo ao rolar (se necessário) */
+    background-color: var(--fc-bg);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-/* DICA: Adicionar uma leve camada escura ou clara por cima da imagem 
-   ajuda muito na leitura dos textos dos ramais e do clima */
 body::before {
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255, 255, 255, 0.2); /* Camada branca bem transparente */
-    z-index: -1; /* Fica atrás de tudo, mas na frente da imagem */
+    background: rgba(255, 255, 255, 0.2);
+    z-index: -1;
 }
 
-/* TOPO FIXO */
+/* ==========================================================================
+   COMPONENTES DE INTERFACE (HEADER, MENU, MARQUEE)
+   ========================================================================== */
 .fixed-top-container { flex-shrink: 0; z-index: 1000; }
-.weather-bar { background: var(--fc-white); padding: 8px; text-align: center; font-size: 12px; font-weight: 700; color: var(--fc-primary); border-bottom: 1px solid #ddd; }
-.header-brand { 
-    background: var(--fc-primary); padding: 15px 20px; 
-    display: flex; justify-content: center; align-items: center; position: relative;
-}
-.brand-name img { height: 30px; }
-.brand-name span { display: block; color: var(--fc-white); font-size: 9px; letter-spacing: 2px; text-align: center; margin-top: 4px; }
 
-/* ÍCONE DO MENU */
+.weather-bar { 
+    background: var(--fc-white); 
+    padding: 8px; 
+    text-align: center; 
+    font-size: 12px; 
+    font-weight: 700; 
+    color: var(--fc-primary); 
+    border-bottom: 1px solid #ddd; 
+}
+
+.header-brand { 
+    background: var(--fc-primary); 
+    padding: 15px 20px; 
+    border-bottom: 3px solid var(--fc-yellow); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    position: relative;
+}
+
+.brand-name img { height: 40px; }
+.brand-name span { display: block; color: var(--fc-white); font-size: 12px; letter-spacing: 2px; text-align: center; margin-top: 4px; }
+
 .menu-icon { 
     position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
     background: var(--fc-yellow); border: none; padding: 8px; border-radius: 6px; 
@@ -53,9 +69,11 @@ body::before {
 }
 .menu-icon .bar { width: 22px; height: 3px; background: var(--fc-primary); border-radius: 2px; }
 
-.marquee-info { background: var(--fc-yellow); color: var(--fc-primary-dark); font-size: 14px; font-weight: 800; padding: 5px 0; }
+.marquee-info { background:rgb(251, 252, 250); color: var(--fc-primary-dark); font-size: 15px; font-weight: 500; padding: 5px 0; }
 
-/* SIDEBAR (MENU LATERAL) */
+/* ==========================================================================
+   SIDEBAR E MEDIA PLAYER
+   ========================================================================== */
 .sidebar { 
     position: fixed; top: 0; right: -280px; width: 280px; 
     height: 100vh; background: var(--fc-primary-dark) !important; 
@@ -76,7 +94,6 @@ body::before {
 }
 .sidebar-item:hover { background: rgba(255,255,255,0.1); color: var(--fc-yellow) !important; }
 
-/* --- MEDIA PLAYER (DENTRO DA SIDEBAR) --- */
 .mp-container {
     background: rgba(255, 255, 255, 0.05);
     margin: 15px;
@@ -84,117 +101,40 @@ body::before {
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.section-title{
-    text-align: center;
-}
-.mp-info {
-    color: var(--fc-yellow);
-    font-size: 11px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-}
 
-.mp-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
+.mp-info { color: var(--fc-yellow); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 8px; text-transform: uppercase; }
 
-.mp-controls button {
-    background: var(--fc-yellow);
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+.mp-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+.mp-controls button { background: var(--fc-yellow); border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-.mp-volume-wrapper {
-    width: 60px;
-    display: flex;
-    align-items: center;
-}
+.mp-volume-wrapper { width: 60px; display: flex; align-items: center; }
+#mp-volume { width: 100%; height: 4px; accent-color: var(--fc-yellow); cursor: pointer; }
 
-#mp-volume {
-    width: 100%;
-    height: 4px;
-    accent-color: var(--fc-yellow);
-    cursor: pointer;
-}
+.mp-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+.mp-tab-btn { flex: 1; background: rgba(255,255,255,0.1); border: none; color: white; font-size: 10px; padding: 4px; border-radius: 4px; cursor: pointer; }
+.mp-tab-btn.active { background: var(--fc-yellow); color: var(--fc-primary-dark); font-weight: 800; }
 
-.mp-tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 8px;
-}
-
-.mp-tab-btn {
-    flex: 1;
-    background: rgba(255,255,255,0.1);
-    border: none;
-    color: white;
-    font-size: 10px;
-    padding: 4px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.mp-tab-btn.active {
-    background: var(--fc-yellow);
-    color: var(--fc-primary-dark);
-    font-weight: 800;
-}
-
-.mp-playlist {
-    max-height: 80px;
-    overflow-y: auto;
-    font-size: 11px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 4px;
-}
-
-.mp-song-item {
-    padding: 6px 10px;
-    color: #ccc;
-    cursor: pointer;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
+.mp-playlist { max-height: 80px; overflow-y: auto; font-size: 11px; background: rgba(0,0,0,0.2); border-radius: 4px; }
+.mp-song-item { padding: 6px 10px; color: #ccc; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .mp-song-item:hover { color: var(--fc-yellow); background: rgba(255,255,255,0.05); }
 
-/* --- RESTANTE DO LAYOUT --- */
 .sidebar-footer { margin-top: auto; padding: 25px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
 .logout-btn { width: 100%; padding: 12px; background: var(--fc-accent); color: white; border: none; border-radius: 6px; font-weight: 800; cursor: pointer; }
 
-.overlay { 
-    display: none; position: fixed; top: 0; left: 0; width: 100%; 
-    height: 100%; background: rgba(0,0,0,0.6); z-index: 4500; 
-}
+/* ==========================================================================
+   CONTAINER CENTRAL E TABELAS
+   ========================================================================== */
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 4500; }
 .overlay.active { display: block; }
 
 .container { 
-    flex-grow: 1; overflow-y: auto; width: 92%; max-width: 800px; 
+    flex-grow: 1; overflow-y: auto; width: 90%; max-width: 800px; 
     margin: 15px auto; background: var(--fc-white); border-radius: 12px; 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1); position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1); position: relative; z-index: 10;
 }
 
-.search-container {
-    position: sticky; top: 0; background: var(--fc-white); padding: 20px; z-index: 100;
-    border-bottom: 1px solid #f1f5f9; border-radius: 12px 12px 0 0;
-}
-
-#search { 
-    width: 100%; padding: 15px; border: 2px solid #e2e8f0; 
-    border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none;
-}
+.search-container { position: sticky; top: 0; background: var(--fc-white); padding: 20px; z-index: 100; border-bottom: 1px solid #f1f5f9; border-radius: 12px 12px 0 0; }
+#search { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; outline: none; }
 
 .table-ramais { width: 100%; border-collapse: collapse; }
 .row-setor td { padding: 20px 20px 8px; font-weight: 800; color: var(--fc-primary); font-size: 11px; text-transform: uppercase; border-bottom: 2px solid var(--fc-yellow); }
@@ -208,56 +148,151 @@ body::before {
 .table-bus { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .table-bus th { background: #f8fafc; color: var(--fc-primary); padding: 15px 5px; border-bottom: 3px solid var(--fc-yellow); }
 .table-bus td { padding: 12px 5px; text-align: center; border-bottom: 1px solid #eef2f6; font-weight: 600; }
-.interval-row td { background: #fffbeb; color: #92400e; font-size: 12px; padding: 15px; }
 
+/* ==========================================================================
+   WIDGETS LATERAIS E CALENDÁRIO (IMPLEMENTAÇÃO SOLICITADA)
+   ========================================================================== */
+.ad-lateral {
+    position: fixed;
+    top: 142px; /* Ajuste esse valor se o marquee verde for maior/menor */
+    height: calc(100vh - 200px);
+    width: calc((100vw - 840px) / 2); 
+    z-index: 1; 
+    overflow: hidden;
+    display: flex;
+    transition: width 0.3s ease;
+}
+
+.ad-esquerda { left: 10px; }
+.ad-direita { right: 10px; }
+
+/* ESTILO DO WIDGET DE CALENDÁRIO NA DIREITA */
+.ad-direita .calendar-widget {
+    width: 100%;
+    height: 100%;
+    background: var(--fc-white);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.calendar-header {
+    background: var(--fc-primary);
+    color: var(--fc-white);
+    padding: 15px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 10px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-days span {
+    text-align: center;
+    padding: 6px 0;
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.calendar-days span.today {
+    background: var(--fc-yellow);
+    color: var(--fc-primary-dark);
+    border-radius: 50%;
+    font-weight: 800;
+}
+
+.calendar-days span.holiday-draw {
+    color: var(--fc-accent);
+    font-weight: 700;
+    position: relative;
+}
+
+.calendar-days span.holiday-draw::after {
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 4px; background: var(--fc-accent); border-radius: 50%;
+}
+
+.holidays-panel {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Custom Scrollbar */
+.holidays-panel::-webkit-scrollbar { width: 4px; }
+.holidays-panel::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+.calendar-widget h4 {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    color: var(--fc-primary);
+    font-weight: 700;
+    border-left: 3px solid var(--fc-yellow);
+    padding-left: 8px;
+    text-transform: uppercase;
+}
+
+#holidays-list { list-style: none; padding: 0; margin: 0; }
+#holidays-list li {
+    font-size: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    display: flex;
+    justify-content: space-between;
+}
+
+.countdown-panel {
+    padding: 15px;
+    background: #f1f5f9;
+    text-align: center;
+}
+
+#countdown-timer {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--fc-primary-dark);
+    background: var(--fc-white);
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid var(--fc-yellow);
+    display: inline-block;
+}
+
+/* ==========================================================================
+   MODAL ACIDENTE E FOOTER
+   ========================================================================== */
 .footer-fixed { flex-shrink: 0; background: var(--fc-primary-dark); color: white; text-align: center; padding: 12px 0; font-size: 12px; border-top: 3px solid var(--fc-yellow); }
-.view-section { display: none; }
-.active { display: block !important; }
 
-.saidaEstac, .saidaLoja { font-size: 12px; color: var(--fc-primary); }
-
-/* MODAL DE ACIDENTE */
 .modal-acidente {
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0;
-    width: 100%; height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 99999;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background: rgba(0, 0, 0, 0.9); z-index: 99999; justify-content: center; align-items: center; padding: 20px;
 }
 
 .modal-acidente-content {
-    background: var(--fc-white);
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    border-top: 8px solid var(--fc-accent);
+    background: var(--fc-white); padding: 30px; border-radius: 20px; text-align: center;
+    max-width: 400px; width: 100%; border-top: 8px solid var(--fc-accent);
 }
 
-.modal-acidente-content h2 { color: var(--fc-accent); font-size: 26px; font-weight: 900; margin-bottom: 15px; }
+.btn-close-acidente { background: var(--fc-accent); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 800; width: 100%; cursor: pointer; }
 
-.lista-emergencia { background: #fff5f5; border-radius: 12px; padding: 15px; margin-bottom: 25px; text-align: left; }
-.item-emergencia { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-.item-emergencia:last-child { border-bottom: none; }
-.item-emergencia strong { color: var(--fc-accent); margin-left: auto; }
-
-.btn-close-acidente {
-    background: var(--fc-accent);
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 10px;
-    font-weight: 800;
-    width: 100%;
-    cursor: pointer;
-}
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 51, 153, 0.4); }
-    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(0, 51, 153, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 51, 153, 0); }
+/* RESPONSIVIDADE */
+@media (max-width: 1150px) {
+    .ad-lateral { display: none !important; }
+    .container { width: 95%; }
 }
